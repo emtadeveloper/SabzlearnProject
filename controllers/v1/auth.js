@@ -47,7 +47,28 @@ exports.register = async (req, res) => {
 };
 
 exports.login = async (req, res) => {
-};
+    const {identifier, password} = req.body
+    const user = await userModel.findOne({
+        $or: [{email: identifier}, {username: identifier}]
+    })
+    console.log({user},'==')
+    if (!user) {
+        return res.status(401).json({
+            message: "There is no user with this email or username"
+        })
+    }
+
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        return res.status(401).json({
+            message: "Password in not valid !!"
+        })
+    }
+
+    const accessToken = jwt.sign({id: user._id}, process.env.JWT_SECRET, {expiresIn: "30 day"});
+
+    return res.json({accessToken})
+}
 
 exports.getMe = async (req, res) => {
 };
