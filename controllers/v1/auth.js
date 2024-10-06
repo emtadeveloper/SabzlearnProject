@@ -2,6 +2,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const userModel = require("../../models/user");
+const banUserModel = require("../../models/ban-phone")
 
 const registerValidator = require("./../../validators/register");
 
@@ -19,6 +20,15 @@ exports.register = async (req, res) => {
             message: "username or email is duplicated",
         });
     }
+
+    const isUserBan = await banUserModel.find({phone});
+
+    if (isUserBan.length) {
+        return res.status(409).json({
+            message: "This phone number ban !"
+        })
+    }
+
     const countOfUsers = await userModel.countDocuments();
     const hashPassword = await bcrypt.hash(password, 12);
     const user = await userModel.create({
