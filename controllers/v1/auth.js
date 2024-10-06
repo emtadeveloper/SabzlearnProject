@@ -48,6 +48,7 @@ exports.register = async (req, res) => {
 
 exports.login = async (req, res) => {
     const {identifier, password} = req.body
+    console.log({identifier})
     const user = await userModel.findOne({
         $or: [{email: identifier}, {username: identifier}]
     })
