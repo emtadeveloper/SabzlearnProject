@@ -1,6 +1,8 @@
+const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+
 const userModel = require('../../models/user');
 const banUserModel = require('../../models/ban-phone');
-const mongoose = require("mongoose");
 
 exports.banUser = async (req, res) => {
     const mainUser = await userModel.findOne({_id: req.params.id}).lean();
@@ -37,4 +39,30 @@ exports.removeUser = async (req, res) => {
     })
 
 
+};
+
+exports.changeRole = async (req, res) => {
+    const {id} = req.body;
+    const user = userModel.findOne({_id: id})
+    let newRole = user.role === "ADMIN" ? "USER" : "ADMIN";
+
+    const updatedUser = await userModel.findByIdAndUpdate({_id: id}, {role: newRole})
+
+    if (updatedUser) {
+        return res.json({message: "User role changed successfully :))"})
+    }
+};
+
+exports.updateUser = async (req, res) => {
+
+    const {name, username, email, password, phone} = req.body;
+    const hashPassword = await bcrypt.hash(password, 12)
+    const user = await userModel.findByIdAndUpdate({_id: req.user._id}, {
+        name,
+        username,
+        email,
+        password: hashPassword
+    }).select("-password").lean()
+
+    return res.json(user)
 }

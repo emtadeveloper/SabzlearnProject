@@ -5,9 +5,11 @@ const isAdminMiddleware = require("./../../middlewares/isAdmin")
 
 const router = express.Router();
 
-router.route("/").get(authMiddleware, isAdminMiddleware,userController.getAll)
+router.route("/").get(authMiddleware, isAdminMiddleware, userController.getAll).put(authMiddleware, userController.updateUser)
 
-router.route('/:id').delete(authMiddleware, isAdminMiddleware,userController.removeUser)
+router.route('/:id').delete(authMiddleware, isAdminMiddleware, userController.removeUser)
+
+router.route("/role").put(authMiddleware, isAdminMiddleware, userController.changeRole)
 
 router.route('/ban/:id').post(authMiddleware, isAdminMiddleware, userController.banUser)
 
