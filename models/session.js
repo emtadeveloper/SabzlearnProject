@@ -6,7 +6,7 @@ const schema = mongoose.Schema({
     }, time: {
         type: String, required: true
     }, free: {
-        type: Number, required: true
+        type: Number, required: true // 0 ( false - not free ) || 1 ( true - free )
     }, video: {
         type: String, required: true
     }, course: {

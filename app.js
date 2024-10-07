@@ -6,6 +6,7 @@ const bodyParser = require("body-parser");
 const authRouter = require("./routes/v1/auth");
 const usersRouter = require('./routes/v1//user');
 const categoriesRouter = require("./routes/v1/category")
+const courseRouter = require("./routes/v1/course")
 
 
 const app = express();
@@ -17,5 +18,6 @@ app.use(bodyParser.json());
 app.use("/v1/auth", authRouter);
 app.use("/v1/users", usersRouter);
 app.use("/v1/category", categoriesRouter);
+app.use("/v1/course", courseRouter);
 
 module.exports = app;
